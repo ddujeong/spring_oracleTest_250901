@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+    <mapper namespace="com.ddu.oracle.dao.BoardDao">
+    	<insert id="boardWriteDao">
+    		INSERT INTO boardtbl(bnum, btitle, bcontent, bwriter,bhit) VALUES (BOARD_SEQ1.nextval, #{param1}, #{param2}, #{param3}, 0)
+    	</insert>
+    	
+    	<resultMap type="com.ddu.oracle.dto.BoardDto" id="boardWithMember">
+    		<id property="bnum" column="bnum"/>
+    		<result property="btitle" column="btitle"/>
+    		<result property="bcontent" column="bcontent"/>
+    		<result property="bwriter" column="bwriter"/>
+    		<result property="bhit" column="bhit"/>
+    		<result property="bdate" column="bdate"/>
+    		
+    		<association property="memberDto" javaType="com.ddu.oracle.dto.MemberDto">
+    			<id property="memberid" column="memberid"/>
+    			<result property="memberpw" column="memberpw"/>
+    			<result property="membername" column="membername"/>
+    			<result property="membernum" column="membernum"/>
+    			<result property="memberdate" column="memberdate"/>
+    		
+    		</association>
+    	</resultMap>
+    	
+    	<select id="boardListDao" resultMap="boardWithMember">
+    		SELECT b.bnum, b.btitle,b.bcontent ,b.bwriter, m.membername, b.bhit, b.bdate FROM boardtbl b INNER JOIN membertbl m on b.bwriter = m.memberid ORDER BY b.bnum DESC
+    	</select>
+    	
+    	<delete id="boardDeleteDao">
+    		DELETE boardtbl WHERE bnum=#{param1}
+    	</delete>
+    	
+    	<select id="allBoardCountDao" resultType="int">
+    		SELECT COUNT(*) FROM boardtbl
+    	</select>
+    	
+    	<select id="contentViewDao" resultType="com.ddu.oracle.dto.BoardDto">
+    		SELECT bnum, bhit, btitle, bcontent, bwriter, bdate FROM boardtbl WHERE bnum=#{param1}
+    	</select>
+    	
+    	<update id="upBhitDao">
+    		UPDATE boardtbl SET bhit = bhit+1 WHERE bnum=#{bnum}
+    	</update>
+    </mapper>
