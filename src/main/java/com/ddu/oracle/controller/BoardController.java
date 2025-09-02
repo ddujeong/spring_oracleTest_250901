@@ -56,8 +56,16 @@ public class BoardController {
 	@RequestMapping(value = "/boardDelete")
 	public String bDelete(HttpServletRequest request, Model model) {
 		BoardDao bDao = sqlSession.getMapper(BoardDao.class);
-		bDao.boardDeleteDao(Integer.parseInt(request.getParameter("bnum")));
-		return"redirect:boardList";
+		int deleteResult = bDao.boardDeleteDao(Integer.parseInt(request.getParameter("bnum")));
+		
+		if(deleteResult == 1) {
+			model.addAttribute("msg" , "글 삭제 완료 되었습니다");
+			model.addAttribute("url", "boardList");
+		} else {
+			model.addAttribute("msg" , "글 삭제가 실패 하였습니다. 다시 확인 해 주세요");
+			model.addAttribute("url", "boardList");
+		}
+		return"alert/alert";
 	}
 	@RequestMapping(value = "/contentView")
 	public String contentView(HttpServletRequest request, Model model) {

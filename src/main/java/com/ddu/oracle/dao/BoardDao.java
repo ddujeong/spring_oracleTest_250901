@@ -12,7 +12,7 @@ public interface BoardDao {
 	
 	public List<BoardDto> boardListDao();
 	
-	public void boardDeleteDao(int bnum);
+	public int boardDeleteDao(int bnum);
 	
 	public int allBoardCountDao();
 	
