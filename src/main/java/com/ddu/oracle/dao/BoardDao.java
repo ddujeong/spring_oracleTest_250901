@@ -19,4 +19,6 @@ public interface BoardDao {
 	public BoardDto contentViewDao(int bnum);
 	
 	public void upBhitDao(@Param("bnum") int bnum);
+	
+	public int boardModifyDao(String btitle, String bcontent, int bnum);
 }

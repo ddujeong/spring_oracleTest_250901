@@ -76,5 +76,21 @@ public class BoardController {
 		model.addAttribute("bDto",bDto);
 		return"contentView";
 	}
+	@RequestMapping(value = "/boardModify")
+	public String boardModify(HttpServletRequest request, Model model) {
+		BoardDao bDao = sqlSession.getMapper(BoardDao.class);
+		
+		int modifyResult= bDao.boardModifyDao(request.getParameter("btitle") ,request.getParameter("bcontent") ,Integer.parseInt(request.getParameter("bnum"))); 
+		
+		if(modifyResult == 1) {
+			model.addAttribute("msg" , "글 수정 완료 되었습니다");
+			model.addAttribute("url", "contentView");
+		} else {
+			model.addAttribute("msg" , "글 수정이 실패 하였습니다. 다시 확인 해 주세요");
+			model.addAttribute("url", "contentView");
+		}
+		
+		return"alert/alert";
+	}
 	
 }

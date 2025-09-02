@@ -29,7 +29,7 @@
 				<td>${bDto.bwriter }</td>
 				<td>${bDto.memberDto.membername }</td>
 				<td>${bDto.bhit }</td>
-				<td>${bDto.bdate }</td>
+				<td><fmt:formatDate value="${bDto.bdate}" pattern="yyyy-MM-dd"/></td>
 				<td> <input type="button" value="삭제" onclick="window.location.href='boardDelete?bnum=${bDto.bnum}'" > </td>
 			</tr>
 		</c:forEach>

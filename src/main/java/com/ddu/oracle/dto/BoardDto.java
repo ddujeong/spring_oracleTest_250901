@@ -1,5 +1,7 @@
 package com.ddu.oracle.dto;
 
+import java.util.Date;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,7 +15,7 @@ public class BoardDto {
 	private String bcontent;
 	private String bwriter;
 	private int bhit;
-	private String bdate;
+	private Date bdate;
 	
 	private MemberDto memberDto; // BoardDto : MemberDto => 1 : 1 관계
 }

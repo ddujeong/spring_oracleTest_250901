@@ -32,7 +32,7 @@
     	</select>
     	
     	<delete id="boardDeleteDao">
-    		DELETE boardtbl WHERE bnum=#{param1}
+    		DELETE FROM boardtbl WHERE bnum=#{param1}
     	</delete>
     	
     	<select id="allBoardCountDao" resultType="int">
@@ -45,5 +45,9 @@
     	
     	<update id="upBhitDao">
     		UPDATE boardtbl SET bhit = bhit+1 WHERE bnum=#{bnum}
+    	</update>
+    	
+    	<update id="boardModifyDao">
+    		UPDATE boardtbl SET btitle=#{param1}, bcontent=#{param2} WHERE bnum=#{param3}
     	</update>
     </mapper>
