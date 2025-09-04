@@ -16,6 +16,7 @@
     		<result property="bwriter" column="bwriter"/>
     		<result property="bhit" column="bhit"/>
     		<result property="bdate" column="bdate"/>
+    		<result property="rnum" column="rnum"/>
     		
     		<association property="memberDto" javaType="com.ddu.oracle.dto.MemberDto">
     			<id property="memberid" column="memberid"/>
@@ -50,4 +51,15 @@
     	<update id="boardModifyDao">
     		UPDATE boardtbl SET btitle=#{param1}, bcontent=#{param2} WHERE bnum=#{param3}
     	</update>
+    	
+    	<select id="pageBoardListDao" resultMap="boardWithMember">
+    	<![CDATA[
+    	SELECT * FROM 
+    		(SELECT ROWNUM AS rnum, r.* FROM 
+    			(SELECT b.bnum, b.btitle,b.bcontent ,b.bwriter, m.membername, b.bhit, b.bdate FROM boardtbl b 
+    				INNER JOIN membertbl m on b.bwriter = m.memberid ORDER BY b.bnum DESC) r 
+    					WHERE ROWNUM <=#{param2} )
+        WHERE rnum >=#{param1}
+        ]]>
+    	</select>
     </mapper>

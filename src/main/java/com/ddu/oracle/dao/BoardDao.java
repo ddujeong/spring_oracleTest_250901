@@ -21,4 +21,6 @@ public interface BoardDao {
 	public void upBhitDao(@Param("bnum") int bnum);
 	
 	public int boardModifyDao(String btitle, String bcontent, int bnum);
+	
+	public List<BoardDto> pageBoardListDao(int startRow, int endRow); // 페이징 된 게시판 글 목록 보기
 }

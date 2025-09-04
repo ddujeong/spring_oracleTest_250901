@@ -46,10 +46,31 @@ public class BoardController {
 	}
 	@RequestMapping(value = "/boardList")
 	public String bList(HttpServletRequest request, Model model) {
+		int pageSize = 10; // 게시판 목록에 한 페이지당 출력될 글 갯수
+		int pageNum = 1; // 유저가 클릭한 페이지의 번호-> 현재 보이는 페이지 번호 (단 처음 게시판에 들어왔을때 1페이지를 보여야 하기때문)
+		int blockSize = 5; // 페이지 블럭에 표시될 페이지의 수 (<< < 1 , 2 , 3 , 4 , 5 > >>)
+		
+		if (request.getParameter("pageNum") != null) {
+			pageNum = Integer.parseInt( request.getParameter("pageNum"));
+		}
+		
+		int startRow = (pageNum * pageSize) - 9; // 페이징 되었을 때 시작할 행의 번호 (1->1 , 2-> 11, 3-> 21)
+		// == (pageNum - 1) * pageSize
+		int endRow = pageNum * pageSize; // 페이징 되었을 때 행의 끝 번호 (1->10 , 2-> 20, 3-> 30)
+		
 		BoardDao bDao = sqlSession.getMapper(BoardDao.class);
-		List<BoardDto> bDtos = bDao.boardListDao();
+		List<BoardDto> bDtos = bDao.pageBoardListDao(startRow, endRow);
+		
+		int totalPage = (int)Math.ceil((double)bDao.allBoardCountDao() /pageSize);
+		int startPage = (((pageNum-1) / blockSize) *blockSize) + 1; 
+		int endPage = Math.min(startPage + (blockSize-1),totalPage );
+		// int endPage = startPage + (blockSize-1);
 		
 		model.addAttribute("bDtos",bDtos);
+		model.addAttribute("startPage",startPage);
+		model.addAttribute("endPage",endPage);
+		model.addAttribute("totalPage",totalPage);
+		model.addAttribute("pageNum",pageNum);
 		model.addAttribute("count",bDao.allBoardCountDao());
 		return"boardList";
 	}
@@ -91,6 +112,52 @@ public class BoardController {
 		}
 		
 		return"alert/alert";
+	}
+	@RequestMapping(value = "/pageList")
+	public String pageList(HttpServletRequest request, Model model) {
+		
+		int pageSize = 10; // 게시판 목록에 한 페이지당 출력될 글 갯수
+		int pageNum = 1; // 유저가 클릭한 페이지의 번호-> 현재 보이는 페이지 번호 (단 처음 게시판에 들어왔을때 1페이지를 보여야 하기때문)
+		int blockSize = 5; // 페이지 블럭에 표시될 페이지의 수 (<< < 1 , 2 , 3 , 4 , 5 > >>)
+		
+		if (request.getParameter("pageNum") != null) {
+			pageNum = Integer.parseInt( request.getParameter("pageNum"));
+		}
+		
+		int startRow = (pageNum * pageSize) - 9; // 페이징 되었을 때 시작할 행의 번호 (1->1 , 2-> 11, 3-> 21)
+		// == (pageNum - 1) * pageSize
+		int endRow = pageNum * pageSize; // 페이징 되었을 때 행의 끝 번호 (1->10 , 2-> 20, 3-> 30)
+		
+		BoardDao bDao = sqlSession.getMapper(BoardDao.class);
+		List<BoardDto> bDtos = bDao.pageBoardListDao(startRow, endRow);
+		
+		int totalPage = (int)Math.ceil((double)bDao.allBoardCountDao() /pageSize);
+		int startPage = (((pageNum-1) / blockSize) *blockSize) + 1; 
+		int endPage = Math.min(startPage + (blockSize-1),totalPage );
+		// int endPage = startPage + (blockSize-1);
+		
+		model.addAttribute("bDtos",bDtos);
+		model.addAttribute("startPage",startPage);
+		model.addAttribute("endPage",endPage);
+		model.addAttribute("totalPage",totalPage);
+		model.addAttribute("pageNum",pageNum);
+		model.addAttribute("count",bDao.allBoardCountDao());
+		return"pageList";
+	}
+	@RequestMapping(value = "/test")
+	public String test(HttpServletRequest request, Model model) {
+		
+		return"test";
+	}
+	@RequestMapping(value = "/mapTest")
+	public String mapTest(HttpServletRequest request, Model model) {
+		
+		return"mapTest";
+	}
+	@RequestMapping(value = "/kakaoMap")
+	public String kakaoMap(HttpServletRequest request, Model model) {
+		
+		return"kakaoMap";
 	}
 	
 }
